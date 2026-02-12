@@ -120,24 +120,24 @@ def run(argv: list[str] | None = None) -> int:
         stop_words = {'a', 'an', 'the', 'with', 'for', 'to', 'in', 'on', 'of', 'and', 'or'}
         key_words = [w for w in words[:4] if w not in stop_words]
         project_name = '_'.join(key_words) if key_words else 'project'
-        
+
         if not args.repo:
-            args.repo = generate_repo_name(sanitize_name(project_name))
+            args.repo = ""
             print(f"Repository: {args.repo}")
         
         if not args.module:
             args.module = 'src/main.py'
             print(f"Module: {args.module}")
         
-        # Initialize git repo
-        repo_path = Path(args.repo)
-        if not repo_path.exists():
-            repo_path.mkdir(parents=True, exist_ok=True)
-            git_dir = repo_path / '.git'
-            if not git_dir.exists():
-                import subprocess
-                subprocess.run(['git', 'init'], cwd=repo_path, capture_output=True)
-                print(f"Initialized git repository")
+        # Disabled Initialization of git repo
+        # repo_path = Path(args.repo)
+        # if not repo_path.exists():
+        #     repo_path.mkdir(parents=True, exist_ok=True)
+        #     git_dir = repo_path / '.git'
+        #     if not git_dir.exists():
+        #         import subprocess
+        #         subprocess.run(['git', 'init'], cwd=repo_path, capture_output=True)
+        #         print(f"Initialized git repository")
         
         print(f"\nCreating: {args.description}")
         print(f"Planning: {args.planning}, Code gen: {args.codegen}\n")
