@@ -1,59 +1,120 @@
 metadata:
-  description: "Prompts for generating code"
-  version: "1.0.0"
-  author: "Classroom CLI Agent"
-  task_type: "code_generation"
+  description: "Generate code artifacts from a natural language description"
+  version: "1.1"
 
 variants:
   default:
-    description: "Standard code generation prompt"
+    description: "General multi-file generation"
     template: |
-      You are a software engineer. Write a single Python module that satisfies the description.
-      Follow the plan.
-      Return ONLY the full module content.
-      Rules:
-      - Output raw Python only
-      - No Markdown
-      - No code fences
-      - No explanations
+      You are a senior software engineer.
 
-      TARGET MODULE PATH: {module_path}
+      Build a small MULTI-FILE Python project that satisfies the description.
 
-      PLAN:
-      {plan}
+      OUTPUT CONTRACT (MUST FOLLOW EXACTLY):
+      - Output MUST be valid JSON and NOTHING else.
+      - The JSON MUST be an object mapping file paths (string) -> file contents (string).
+      - Do NOT wrap in Markdown or code fences.
+      - Do NOT include explanations or extra text outside the JSON.
+      - Use ONLY relative paths under the repo.
+      - Every file content MUST be complete file text.
+
+      HARD REQUIREMENTS:
+      - MUST include the entry module at: {module_path}
+      - MUST include AT LEAST 3 Python files total (>= 3 JSON keys ending in .py)
+      - MUST include a README.md with run instructions
+      - MUST include a requirements.txt ONLY if a third-party library is required.
+      - If you include requirements.txt, list ONLY real pip-installable dependencies.
+
+      IMPORT RULES (MUST FOLLOW):
+      - Assume scripts will be executed from their own directory
+      - Therefore, all internal imports MUST be same-folder imports 
+      - Do NOT use package-qualified imports 
+      - Do NOT modify sys.path.
+      - Do NOT rely on the repo root being on PYTHONPATH.
+
+
+      DESIGN GUIDELINES:
+      - Keep it minimal, readable, and cohesive.
+      - Prefer standard library unless the description requires otherwise.
+      - Split code into logical modules (e.g., core logic, UI/CLI, helpers).
+      - Keep the entry module thin and delegate to other modules.
 
       DESCRIPTION:
       {desc}
 
-  documented:
-    description: "Generate well-documented code"
-    template: |
-      You are a senior software engineer. Create a well-documented Python module.
-      
-      Path: {module_path}
-      
-      Implementation Plan:
+      PLAN:
       {plan}
+
+  documented:
+    description: "General multi-file generation with docstrings/comments"
+    template: |
+      You are a senior software engineer.
+
+      Build a small MULTI-FILE Python project that satisfies the description.
+
+      OUTPUT CONTRACT (MUST FOLLOW EXACTLY):
+      - Output MUST be valid JSON and NOTHING else.
+      - The JSON MUST be an object mapping file paths (string) -> file contents (string).
+      - Do NOT wrap in Markdown or code fences.
+      - Do NOT include explanations or extra text outside the JSON.
+      - Use ONLY relative paths under the repo.
+      - Every file content MUST be complete file text.
+
+      HARD REQUIREMENTS:
+      - MUST include the entry module at: {module_path}
+      - MUST include AT LEAST 3 Python files total (>= 3 JSON keys ending in .py)
+      - MUST include a README.md with run instructions
+      - MUST include requirements.txt if a third-party library is required by the description.
+      - If included, requirements.txt must list only real pip dependencies.
       
-      Requirements:
+      IMPORT RULES (MUST FOLLOW):
+      - Assume scripts will be executed from their own directory 
+      - Therefore, all internal imports MUST be same-folder imports
+      - Do NOT use package-qualified imports
+      - Do NOT modify sys.path.
+      - Do NOT rely on the repo root being on PYTHONPATH.
+
+      STYLE:
+      - Add docstrings for modules/classes/functions.
+      - Use type hints.
+      - Keep comments helpful but not excessive.
+      - Include basic error handling when relevant.
+
+      DESCRIPTION:
       {desc}
-      
-      Standards:
-      - Comprehensive docstrings (Google style)
-      - Type hints for all functions
-      - Inline comments for complex logic
-      - Clear variable names
-      - Return ONLY raw Python code
-      - No markdown formatting
+
+      PLAN:
+      {plan}
 
   minimal:
-    description: "Generate minimal, concise code"
+    description: "General multi-file generation, minimal verbosity"
     template: |
-      Write minimal Python code for: {desc}
+      You are a senior software engineer.
+
+      Build a small MULTI-FILE Python project.
+
+      OUTPUT CONTRACT (MUST FOLLOW EXACTLY):
+      - Output MUST be valid JSON and NOTHING else.
+      - JSON object mapping file paths -> file contents.
+      - No Markdown, no code fences, no extra text.
+      - Use ONLY relative paths.
+
+      HARD REQUIREMENTS:
+      - MUST include {module_path}
+      - MUST include AT LEAST 3 Python files total
+      - MUST include README.md
+      - Include requirements.txt only if third-party deps are required.
       
-      Follow this plan:
+      IMPORT RULES (MUST FOLLOW):
+      - Assume scripts will be executed from their own directory
+      - Therefore, all internal imports MUST be same-folder imports 
+      - Do NOT use package-qualified imports 
+      - Do NOT modify sys.path.
+      - Do NOT rely on the repo root being on PYTHONPATH.
+
+
+      DESCRIPTION:
+      {desc}
+
+      PLAN:
       {plan}
-      
-      Target: {module_path}
-      
-      Rules: Raw Python only, no comments unless critical, no markdown.

@@ -16,6 +16,13 @@ DEFAULT_MODEL = "devstral-small-2:24b-cloud"
 DEFAULT_HOST = "http://localhost:11434"
 VERSION = "0.5.0"
 
+def derive_project_module_path(module_arg: str) -> str:
+    p = Path(module_arg)
+    stem = p.stem
+    parent = p.parent
+
+    project_dir = parent / stem
+    return (project_dir / p.name).as_posix()
 
 def sanitize_name(text: str) -> str:
     """Convert text to a valid directory/file name."""
@@ -160,15 +167,13 @@ def run(argv: list[str] | None = None) -> int:
         verbose=args.verbose,
     )
     agent = Agent(cfg)
-    
-    # Set variants if create command
-    if args.cmd == "create":
-        agent.planning_variant = args.planning
-        agent.code_gen_variant = args.codegen
+
 
     try:
         if args.cmd == "create":
+            args.module = derive_project_module_path(args.module)
             r = agent.create_program(args.description, args.module)
+
         elif args.cmd == "commit":
             r = agent.commit_and_push(args.message, args.push)
         else:

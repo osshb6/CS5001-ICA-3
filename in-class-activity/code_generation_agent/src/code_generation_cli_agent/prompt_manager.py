@@ -38,7 +38,7 @@ class PromptManager:
         json_path = self.prompts_dir / f"{task_type}.json"
         
         if yaml_path.exists():
-            with open(yaml_path, 'r') as f:
+            with open(yaml_path, "r", encoding="utf-8", errors="replace") as f:
                 config = yaml.safe_load(f)
         elif json_path.exists():
             with open(json_path, 'r') as f:

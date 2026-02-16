@@ -1,20 +1,20 @@
 metadata:
-  description: "Prompts for creating implementation plans"
-  version: "1.0.0"
-  author: "Classroom CLI Agent"
-  task_type: "planning"
+  description: "Create an implementation plan"
+  version: "1.1"
 
 variants:
   default:
-    description: "Standard planning prompt for code generation"
+    description: "Short, general plan"
     template: |
       You are a senior software engineer. Create a short, actionable implementation plan with ordered steps.
-      
+
       Constraints:
       - Keep the solution minimal and readable
-      - Assume standard library only unless the description requires otherwise
+      - Prefer standard library unless the description requires otherwise
       - Do not write code yet
       - Output plain text only
+
+      Include a brief 'Files' section listing 3+ Python modules/files you expect to create and what each does.
 
       TARGET MODULE PATH: {module_path}
 
@@ -22,32 +22,29 @@ variants:
       {desc}
 
   detailed:
-    description: "More detailed planning with architecture considerations"
+    description: "More detailed plan with clear file breakdown"
     template: |
-      You are a senior software architect. Create a comprehensive implementation plan.
-      
+      You are a senior software engineer. Create a short, actionable implementation plan with ordered steps.
+
+      Constraints:
+      - Keep the solution minimal and readable
+      - Prefer standard library unless the description requires otherwise
+      - Do not write code yet
+      - Output plain text only
+
+      Your plan MUST include:
+      1) A "Files" section listing 3+ Python files/modules (including the target module path) and their responsibilities
+      2) A short "Run" section describing how to run the program/app
+
       TARGET MODULE PATH: {module_path}
-      
-      REQUIREMENTS:
+
+      DESCRIPTION:
       {desc}
-      
-      Your plan should include:
-      1. Architecture overview
-      2. Key components and their responsibilities
-      3. Data structures needed
-      4. Function signatures
-      5. Dependencies (prefer standard library)
-      6. Edge cases to handle
-      7. Testing considerations
-      
-      Output as numbered steps in plain text.
 
   minimal:
-    description: "Quick planning for simple tasks"
+    description: "Minimal plan"
     template: |
-      Create a brief plan (3-5 steps) for implementing:
-      {desc}
-      
-      Target file: {module_path}
-      
-      Keep it simple and actionable.
+      Write a minimal plan in 5-8 bullet points.
+      Include a Files section listing 3+ Python files.
+      TARGET MODULE PATH: {module_path}
+      DESCRIPTION: {desc}
